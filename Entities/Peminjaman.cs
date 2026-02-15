@@ -36,5 +36,7 @@ namespace PinjamRuanganAPI.Entities
 
         [Required]
         public StatusPeminjaman Status {get; set;} = StatusPeminjaman.Menunggu;
+
+        public DateTime? DeletedAt { get; set; }
     }
 }

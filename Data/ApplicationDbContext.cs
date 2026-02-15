@@ -12,10 +12,13 @@ namespace PinjamRuanganAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder
-                .Entity<Peminjaman>()
-                .Property(p => p.Status)
-                .HasConversion<string>();
+            modelBuilder.Entity<Peminjaman>(entity =>
+            {
+                entity.Property(p => p.Status)
+                    .HasConversion<string>();
+
+                entity.HasQueryFilter(p => p.DeletedAt == null);
+            });
         }
     }
 }

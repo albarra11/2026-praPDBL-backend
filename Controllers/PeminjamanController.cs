@@ -91,7 +91,7 @@ namespace PinjamRuanganAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PeminjamanResponseDto>> GetById(int id)
         {
-            var p = await _context.Peminjaman.FindAsync(id);
+            var p = await _context.Peminjaman.FirstOrDefaultAsync(x => x.Id == id);
 
             if(p == null) return NotFound();
             var response = new PeminjamanResponseDto
@@ -120,6 +120,18 @@ namespace PinjamRuanganAPI.Controllers
             peminjaman.Status = dto.Status;
             await _context.SaveChangesAsync();
             return Ok(peminjaman.Status.ToString());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> SoftDelete(int id)
+        {
+            var peminjaman = await _context.Peminjaman.FirstOrDefaultAsync(p => p.Id == id);
+            if (peminjaman == null) return NotFound("Data peminjaman tidak ditemukan");
+
+            peminjaman.DeletedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
