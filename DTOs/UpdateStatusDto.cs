@@ -1,7 +1,9 @@
-namespace PinjamRuanganAPI
+using PinjamRuanganAPI.Enums;
+
+namespace PinjamRuanganAPI.DTOs
 {
     public class UpdateStatusDto
     {
-        public string Status {get; set;}
+        public StatusPeminjaman Status {get; set;}
     }
 }

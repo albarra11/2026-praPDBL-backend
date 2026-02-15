@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using PinjamRuanganAPI.Enums;
 
 namespace PinjamRuanganAPI.Entities
 {
@@ -34,7 +35,6 @@ namespace PinjamRuanganAPI.Entities
         public TimeSpan WaktuSelesai {get; set;}
 
         [Required]
-        [MaxLength(50)]
-        public string Status {get; set;} = "Menunggu";
+        public StatusPeminjaman Status {get; set;} = StatusPeminjaman.Menunggu;
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PinjamRuanganAPI.Data;
 using PinjamRuanganAPI.Entities;
 using PinjamRuanganAPI.DTOs;
+using PinjamRuanganAPI.Enums;
 
 namespace PinjamRuanganAPI.Controllers
 {
@@ -114,11 +115,11 @@ namespace PinjamRuanganAPI.Controllers
         {
             var peminjaman = await _context.Peminjaman.FindAsync(id);
 
-            if(peminjmana = null) return NotFound("Data peminjaman tidak ditemukan");
+            if(peminjaman == null) return NotFound("Data peminjaman tidak ditemukan");
 
-            peminjaman.status = dto.status;
+            peminjaman.Status = dto.Status;
             await _context.SaveChangesAsync();
-            return Ok(peminjaman);
+            return Ok(peminjaman.Status.ToString());
         }
     }
 }

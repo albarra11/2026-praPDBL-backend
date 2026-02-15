@@ -1,4 +1,5 @@
 using System;
+using PinjamRuanganAPI.Enums;
 
 namespace PinjamRuanganAPI.DTOs
 {
@@ -12,6 +13,6 @@ namespace PinjamRuanganAPI.DTOs
         public DateTime Tanggal { get; set; }
         public TimeSpan WaktuMulai { get; set; }
         public TimeSpan WaktuSelesai { get; set; }
-        public string Status { get; set; } = null!;
+        public StatusPeminjaman Status { get; set; }
     }
 }
