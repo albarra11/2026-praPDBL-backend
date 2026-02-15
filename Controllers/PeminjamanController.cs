@@ -108,5 +108,17 @@ namespace PinjamRuanganAPI.Controllers
             
             return Ok(response);
         }
+
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, UpdateStatusDto dto)
+        {
+            var peminjaman = await _context.Peminjaman.FindAsync(id);
+
+            if(peminjmana = null) return NotFound("Data peminjaman tidak ditemukan");
+
+            peminjaman.status = dto.status;
+            await _context.SaveChangesAsync();
+            return Ok(peminjaman);
+        }
     }
 }
