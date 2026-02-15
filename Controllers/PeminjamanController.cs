@@ -70,20 +70,46 @@ namespace PinjamRuanganAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PeminjamanResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<PeminjamanResponseDto>>> GetAll(
+            [FromQuery] StatusPeminjaman? status,
+            [FromQuery] string? keyword,
+            [FromQuery] string? ruangan,
+            [FromQuery] DateTime? tanggal
+        )
         {
-            var data = await _context.Peminjaman.Select(p => new PeminjamanResponseDto
-            {
-                Id = p.Id,
-                NamaPeminjam = p.NamaPeminjam,
-                NomorPeminjam = p.NomorPeminjam,
-                AlasanPeminjaman = p.AlasanPeminjaman,
-                NamaRuangan = p.NamaRuangan,
-                Tanggal = p.Tanggal,
-                WaktuMulai = p.WaktuMulai,
-                WaktuSelesai = p.WaktuSelesai,
-                Status = p.Status
-            }).ToListAsync();
+            var query = _context.Peminjaman.AsQueryable();
+
+            if (status.HasValue)
+                query = query.Where(p => p.Status == status.Value);
+
+            if (!string.IsNullOrWhiteSpace(ruangan))
+                query = query.Where(p => p.NamaRuangan.Contains(ruangan));
+
+            if (tanggal.HasValue)
+                query = query.Where(p => p.Tanggal.Date == tanggal.Value.Date);
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+                query = query.Where(p =>
+                    p.NamaPeminjam.Contains(keyword) ||
+                    p.NomorPeminjam.Contains(keyword) ||
+                    p.NamaRuangan.Contains(keyword) ||
+                    p.AlasanPeminjaman.Contains(keyword)
+                );
+
+            var data = await query
+                .OrderByDescending(p => p.Id)
+                .Select(p => new PeminjamanResponseDto
+                {
+                    Id = p.Id,
+                    NamaPeminjam = p.NamaPeminjam,
+                    NomorPeminjam = p.NomorPeminjam,
+                    AlasanPeminjaman = p.AlasanPeminjaman,
+                    NamaRuangan = p.NamaRuangan,
+                    Tanggal = p.Tanggal,
+                    WaktuMulai = p.WaktuMulai,
+                    WaktuSelesai = p.WaktuSelesai,
+                    Status = p.Status
+                }).ToListAsync();
 
             return Ok(data);
         }
